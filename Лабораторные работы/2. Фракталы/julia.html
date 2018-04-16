@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+</head>
+<body>
+    <canvas id="canvas" width="500" height="500"></canvas>
+
+    <script>
+        var cnv = document.getElementById("canvas");
+        var ctx = cnv.getContext("2d");
+
+        var width = cnv.width,
+            height = cnv.height;
+
+        var imgData = ctx.getImageData(1, 1, width, height);
+        var pixelData = imgData.data;
+
+        var Xmax = width, Ymax = height;
+        var xmax = 1, xmin = -xmax,
+            ymax = 1, ymin = -ymax;
+        var pixelsPerUnitX = width / (xmax - xmin);
+            pixelsPerUnitY = height / (ymax - ymin);
+       
+         let cRe = -0.8, cIm = 0.156;
+         
+        juliaFractal(cRe, cIm);
+        
+        ctx.putImageData(imgData, 1, 1);
+        
+
+    function juliaFractal(cRe, cIm) {
+        let z0Re = 0, z0Im = 0, z1Re = 0, z1Im = 0;
+         let maxIterations = 255;
+         let color = 0, r, g, b;
+
+         var x, y;
+         for (let X = 0; X < width; X++) {
+             for (let Y = 0; Y < height; Y++) {
+                x = calcx(X); y = calcy(Y);
+                
+                //console.log(x + "+" + y + "i");
+                z1Re = x + cRe;
+                z1Im = y + cIm;
+                //console.log(z1Re + "+" + z1Im + "i");
+
+                for (let i = 0; i < maxIterations; i++) {
+                    z0Re = z1Re; z0Im = z1Im;
+                    z1Re = z0Re*z0Re - z0Im*z0Im + cRe;
+                    z1Im = 2*z0Re*z0Im + cIm;
+                    if (z1Re*z1Re + z1Im*z1Im <= 2) {
+                        color+=3;
+                    }
+                    else break;
+                }
+                
+                color = color % (255*4);
+                if (color < 255) r = color;
+                else if (color < 255*2) g = color;
+                else if (color < 255*3) b = color;              
+                setPixel(X, Y, r, g, b);
+                color = 0; r = 0; g = 0; b = 0;               
+            }
+         }
+    }
+
+    function calcx(X) {
+        return xmin + X/pixelsPerUnitX;
+    }
+    function calcy(Y) {
+        return ymax - Y/pixelsPerUnitY;
+    }
+
+    function setPixel(X, Y, r = 0, g = 0, b = 0) {
+        pixelData[Y*Xmax*4 + X*4] = r;
+        pixelData[Y*Xmax*4 + X*4+1] = g;
+        pixelData[Y*Xmax * 4 + X*4+2] = b;
+        pixelData[Y*Xmax * 4 + X*4+3] = 255;
+    } 
+    </script>
+</body>
+</html>

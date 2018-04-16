@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>House</title>
+</head>
+<body>
+    <canvas id="canvas" width="1024" height="1024" />
+
+    <script type="text/javascript" src="grid.js"></script>
+    
+    <script>
+        var cnv = document.getElementById("canvas");
+        var ctx = cnv.getContext("2d");
+        setCanvas(cnv);
+    
+        var width = cnv.width;
+        var height = cnv.height;
+        setGrid(width, height, 10)
+        drawGrid();
+        drawHouse(3);
+    
+    function drawHouse(size) {
+        setThickness(3);
+    
+        gridRect(-size, size, size, -size);
+    
+        gridLine(-size, size, 0, size*2);
+        gridLine(size, size, 0, size*2);
+    
+        gridRect(size/2, size/2, -size/2, -size/2);
+    
+        gridLine(size - 0.5, size + 0.5, size - 0.5, size + 1);
+        gridLine(size - 0.2, size + 0.2, size - 0.2, size + 1);
+        gridLine(size - 0.5, size + 1, size - 0.2, size + 1);
+    }
+    </script>
+</body>
+</html>

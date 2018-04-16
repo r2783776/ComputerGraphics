@@ -1,0 +1,36 @@
+<canvas id="canvas" width="1024" height="1024" />
+
+<script src="grid.js"></script>
+
+<script>
+    var cnv = document.getElementById("canvas");
+    var ctx = cnv.getContext("2d");
+    setCanvas(cnv);
+
+    var width = cnv.width;
+    var height = cnv.height;
+    setGrid(width, height, 5)
+    drawGrid();
+    drawRocket();
+
+function drawRocket() {
+    setThickness(3);
+
+    gridRect(-1, 1, 1, -2);
+
+    gridLine(-1, -2, -1.5, -2.5);
+    gridLine(0, -2, 0, -2.5);
+    gridLine(1, -2, 1.5, -2.5);
+    gridLine(-1.5, -2.5, 1.5, -2.5);
+
+    gridLine(-1, 0, -2, 0);
+    gridLine(-2, 0, 0, 2);
+    gridLine(1, 0, 2, 0);
+    gridLine(2, 0, 0, 2);
+
+    ctx.font = 40 / 1024 * width + "px Courier New";
+    gridText("-", -1.3, 0.3);
+    gridText("*", 0, 1.2);
+    gridText("+", 1.3, 0.3);
+}
+</script>

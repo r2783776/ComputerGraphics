@@ -1,0 +1,105 @@
+<canvas id="canvas" width="1024" height="1024" />
+
+<script src="grid.js"></script>
+
+<script>
+    var cnv = document.getElementById("canvas");
+    var ctx = cnv.getContext("2d");
+    setCanvas(cnv);
+
+    var width = cnv.width;
+    var height = cnv.height;
+    setGrid(width, height, 3)
+    drawGrid();
+    drawCrosh(0.5);
+
+function drawCrosh(size) {
+    setThickness(3);
+
+    gridArc(0, 0, size, 0, 2*Math.PI);
+
+    setThickness(3);
+
+    let angleStep = Math.PI / 40;
+
+    /* Ears */
+    let leftEarSAngle = angleStep * 9;
+    let leftEarEAngle = angleStep * 16;
+    let rightEarSAngle = angleStep * 24;
+    let rightEarEAngle = angleStep * 31;
+    drawQBezierCurveOnArc(leftEarSAngle, leftEarEAngle, 1.5, size);
+    drawQBezierCurveOnArc(rightEarSAngle, rightEarEAngle, 1.5, size);
+
+    /* Hands */
+    let rightHandSAngle = angleStep * 36;
+    let rightHandEAngle = angleStep * 44;
+    let leftHandSAngle = angleStep * 76;
+    let leftHandEAngle = angleStep * 4;
+    let rightHandCenter = Math.cos(rightHandSAngle) * size;
+    let leftHandCenter = Math.cos(leftHandEAngle) * size;
+    gridArc(rightHandCenter, 0, Math.abs(Math.sin(rightHandSAngle) * 0.5), Math.PI * 0.5, Math.PI * 1.5);
+    gridArc(leftHandCenter, 0, Math.abs(Math.sin(leftHandSAngle) * 0.5), Math.PI * 1.5, Math.PI * 0.5);
+
+    /* Feet */
+    let rightFootAngle = angleStep * 50;
+    let rightFootCenterX = Math.cos(rightFootAngle) * size;
+    let leftFootAngle = angleStep * 70;
+    let leftFootCenterX = Math.cos(leftFootAngle) * size; 
+    let footCenterY = (Math.sin(rightFootAngle) - 0.39) * size;
+    let footRadius = size * 0.3;
+    gridArc(rightFootCenterX, footCenterY, footRadius, Math.PI, Math.PI * 2);
+    gridLine(rightFootCenterX - footRadius, footCenterY,
+        rightFootCenterX + footRadius, footCenterY);
+    gridArc(leftFootCenterX, footCenterY, footRadius, Math.PI, Math.PI * 2);
+    gridLine(leftFootCenterX - footRadius, footCenterY,
+        leftFootCenterX + footRadius, footCenterY);
+
+    /* Face */
+    gridArc(0, 0, 0.5 * size, Math.PI * 0.20, Math.PI * 0.80);
+    gridArc(0.4 * size, 0.4 * size, 0.2 * size, 0, Math.PI * 2);
+    gridArc(-0.4 * size, 0.4 * size, 0.2 * size, Math.PI * 0.2, Math.PI * 0.7);
+
+    /* Hair on body */
+    setThickness();
+
+    for (let angle = leftHandEAngle; angle < leftEarSAngle; angle += angleStep) {
+        drawQBezierCurveOnArc(angle, angle + angleStep, 0.55, size);
+    }
+    for (let angle = leftEarEAngle; angle < rightEarSAngle; angle += angleStep) {
+        drawQBezierCurveOnArc(angle, angle + angleStep, 0.55, size);
+    }
+    for (let angle = rightEarEAngle; angle < rightHandSAngle; angle += angleStep) {
+        drawQBezierCurveOnArc(angle, angle + angleStep, 0.55, size);
+    }
+    for (let angle = rightHandEAngle; angle <= rightFootAngle; angle += angleStep) {
+        drawQBezierCurveOnArc(angle, angle + angleStep, 0.55, size);
+    }
+    for (let angle = rightFootAngle + angleStep * 4; angle <= leftFootAngle - angleStep * 4; angle += angleStep) {
+        drawQBezierCurveOnArc(angle, angle + angleStep, 0.55, size);
+    }
+    for (let angle = leftFootAngle - angleStep; angle <= leftHandSAngle; angle += angleStep) {
+        drawQBezierCurveOnArc(angle, angle + angleStep, 0.55, size);
+    }
+
+    /* Hair on hands */
+    for (let angle = - Math.PI * 0.5; angle < Math.PI * 0.5; angle += angleStep)
+    {
+        drawQBezierCurveOnArc(angle, angle + angleStep, 0.54, 0.3 * size, leftHandCenter, 0);
+    }
+    for (let angle = Math.PI * 0.5; angle < Math.PI * 1.5; angle += angleStep)
+    {
+        drawQBezierCurveOnArc(angle, angle + angleStep, 0.54, 0.3 * size, rightHandCenter, 0);
+    }
+}
+
+function drawQBezierCurveOnArc(sAngle, eAngle, size, r = 1, cX = 0, cY = 0) {
+    let x1 = Math.cos(sAngle)*r + cX;
+    let y1 = Math.sin(sAngle)*r + cY;
+    let x2 = Math.cos(eAngle)*r + cX;
+    let y2 = Math.sin(eAngle)*r + cY;
+    let cpx = (x1 + x2) * size;
+    let cpy = (y1 + y2) * size;
+
+    gridQBezierCurve(x1, y1, x2, y2, cpx, cpy);
+}
+</script>

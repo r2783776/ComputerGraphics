@@ -1,0 +1,50 @@
+<canvas id="canvas" width="1024" height="1024" />
+
+<script src="grid.js"></script>
+
+<script>
+    var cnv = document.getElementById("canvas");
+    var ctx = cnv.getContext("2d");
+    setCanvas(cnv);
+
+    var width = cnv.width;
+    var height = cnv.height;
+    setGrid(width, height, 5);
+    drawGrid();
+    drawSDroid();
+
+function drawSDroid() {
+    setThickness(3);
+
+    gridRect(-1.5, 1.5, 1.5, -1.5);
+
+    gridLine(-1.2, -1.5, -0.9, -1.8);
+    gridLine(-0.9, -1.8, -0.6, -1.8);
+    gridLine(-0.6, -1.8, -0.3, -1.5);
+    gridLine(0.3, -1.5, 0.6, -1.8);
+    gridLine(0.6, -1.8, 0.9, -1.8);
+    gridLine(0.9, -1.8, 1.2, -1.5);
+
+    gridLine(-1.5, 1.5, -1, 2);
+    gridLine(-1, 2, 1, 2);
+    gridLine(1, 2, 1.5, 1.5);
+
+    gridLine(0, 2, -1, 3);
+    gridArc(-1.1, 3.1, 0.15, 0, 2*Math.PI);
+    gridLine(0, 2, 1, 3);
+    gridArc(1.1, 3.1, 0.15, 0, 2*Math.PI);
+
+    gridLine(-1.5, 0.1, -1.7, 0.1);
+    gridLine(-1.5, 0.7, -1.7, 0.7);
+    gridArc(-1.7, 0.4, 0.3, 0.5*Math.PI, 1.5*Math.PI);
+    gridLine(1.5, 0.1, 1.7, 0.1);
+    gridLine(1.5, 0.7, 1.7, 0.7);
+    gridArc(1.7, 0.4, 0.3, -0.5*Math.PI, 0.5*Math.PI);
+
+    gridRect(-1, 1, 1, -1);
+
+    ctx.font = 40 / 1024 * width + "px Courier New";
+    gridText("-", -0.5, 1.6);
+    gridText("+", 0.5, 1.6);
+}
+</script>
